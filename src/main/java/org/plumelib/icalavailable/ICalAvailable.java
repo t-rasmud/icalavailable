@@ -40,6 +40,8 @@ import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
 
+import org.checkerframework.checker.determinism.qual.*;
+
 // TODO:  Fix "Problem:  any all-day events will be treated as UTC." (see below)
 
 /**
@@ -179,7 +181,7 @@ public final class ICalAvailable {
   @EnsuresNonNull("tz1")
   static void processOptions(String[] args) {
     Options options = new Options("ICalAvailable [options]", ICalAvailable.class);
-    String[] remaining_args = options.parse(true, args);
+    @Det String[] remaining_args = options.parse(true, args);
     if (remaining_args.length != 0) {
       System.err.println("Unrecognized arguments: " + Arrays.toString(remaining_args));
       System.exit(1);
@@ -243,7 +245,7 @@ public final class ICalAvailable {
             InputStream url_is = url2.openStream();
             System.out.printf("URL: %s%n", url2);
             System.out.println("Contents:");
-            byte[] buffer = new byte[1024];
+            @Det byte[] buffer = new @Det byte[1024];
             int len = url_is.read(buffer);
             while (len != -1) {
               System.out.write(buffer, 0, len);
@@ -262,7 +264,7 @@ public final class ICalAvailable {
     }
 
     for (String range : business_hours.split(",")) {
-      String[] startEnd = range.split("-");
+      @Det String[] startEnd = range.split("-");
       if (startEnd.length != 2) {
         System.err.println("Bad time range: " + range);
         System.exit(1);
@@ -274,9 +276,9 @@ public final class ICalAvailable {
   }
 
   /** Maps a short name to a canonical name, for commonly-used time zones. */
-  static Map<String, String> canonicalTimezones = new HashMap<>();
+  static @OrderNonDet Map<String, String> canonicalTimezones = new HashMap<>();
   /** Maps a long time zone name to a shorter one. */
-  static Map<String, String> printedTimezones = new HashMap<>();
+  static @OrderNonDet Map<String, String> printedTimezones = new HashMap<>();
   // Yuck, this should really be a separate configuration file.
   static {
     canonicalTimezones.put("eastern", "America/New_York");
@@ -472,7 +474,7 @@ public final class ICalAvailable {
    * @param time supplies the time for the result
    * @return the merged DateTime
    */
-  @SuppressWarnings("deprecation") // for iCal4j
+  @SuppressWarnings({"deprecation","determinism:nondeterministic.tostring"}) // for iCal4j
   static DateTime mergeDateAndTime(DateTime date, DateTime time) {
     if (!date.getTimeZone().equals(time.getTimeZone())) {
       throw new Error(
