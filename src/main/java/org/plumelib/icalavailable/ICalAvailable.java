@@ -30,6 +30,7 @@ import net.fortuna.ical4j.model.component.CalendarComponent;
 import net.fortuna.ical4j.model.component.VFreeBusy;
 import net.fortuna.ical4j.model.parameter.FbType;
 import net.fortuna.ical4j.model.property.FreeBusy;
+import org.checkerframework.checker.determinism.qual.*;
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -39,8 +40,6 @@ import org.checkerframework.checker.regex.qual.Regex;
 import org.checkerframework.dataflow.qual.Pure;
 import org.plumelib.options.Option;
 import org.plumelib.options.Options;
-
-import org.checkerframework.checker.determinism.qual.*;
 
 // TODO:  Fix "Problem:  any all-day events will be treated as UTC." (see below)
 
@@ -474,8 +473,9 @@ public final class ICalAvailable {
    * @param time supplies the time for the result
    * @return the merged DateTime
    */
-  @SuppressWarnings({"deprecation",    // for iCal4j
-          "determinism:nondeterministic.tostring"    // Potential true positive? TimeZone doesn't implement a toString()
+  @SuppressWarnings({
+    "deprecation", // for iCal4j
+    "determinism:nondeterministic.tostring" // true positive; toString: TimeZone doesn't implement
   })
   static DateTime mergeDateAndTime(DateTime date, DateTime time) {
     if (!date.getTimeZone().equals(time.getTimeZone())) {
