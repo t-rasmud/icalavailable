@@ -475,7 +475,6 @@ public final class ICalAvailable {
    */
   @SuppressWarnings({
     "deprecation", // for iCal4j
-    "determinism:nondeterministic.tostring" // true positive; user output; Object.toString not overridden: TimeZone doesn't implement
   })
   static DateTime mergeDateAndTime(DateTime date, DateTime time) {
     if (!date.getTimeZone().equals(time.getTimeZone())) {
