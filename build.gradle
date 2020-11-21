@@ -78,7 +78,7 @@ checkerFramework {
     '-Werror',
     // '-AcheckPurityAnnotations',
     '-ArequirePrefixInWarningSuppressions',
-    '-AwarnUnneededSuppressions',
+    '-AwarnUnneededSuppressions', '-AwarnUnneededSuppressionsExceptions=purity|method.guarantee.violated',
     // '-AusePolyDefault' 
   ]
 }
