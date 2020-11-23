@@ -334,7 +334,7 @@ public final class ICalAvailable {
       Pattern.compile("([0-2]?[0-9])(:([0-5][0-9]))?([aApP][mM])?");
 
   /**
-   * Parse a time like "9:30pm".
+   * Parse a time like "9:30pm". The result's time zone is {@code tz1}.
    *
    * @param time the string to parse as a time
    * @return the time represented by {@code time}
@@ -348,8 +348,7 @@ public final class ICalAvailable {
       System.err.println("Bad time: " + time);
       System.exit(1);
     }
-    @SuppressWarnings(
-        "nullness") // Regex Checker imprecision:  matches() guarantees group 1 exists in regexp
+    @SuppressWarnings("nullness") // for this regex, matches() guarantees that group 1 matched
     @NonNull String hourString = m.group(1);
     String minuteString = m.group(3);
     String ampmString = m.group(4);
