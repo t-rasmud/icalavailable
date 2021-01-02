@@ -475,12 +475,12 @@ public final class ICalAvailable {
   @SuppressWarnings({
     "deprecation", // for iCal4j
   })
+  // true positive; `getTimeZone()` returns a NonDet String
+  // Fixed: https://github.com/plume-lib/icalavailable/commit/1a9ad3bd16b36ce3b6bedcbc2cab105e5ef69ea5
   static DateTime mergeDateAndTime(DateTime date, DateTime time) {
     if (!date.getTimeZone().equals(time.getTimeZone())) {
       throw new Error(
-          String.format(
-              "non-matching timezones: %s %s",
-              date.getTimeZone().getDisplayName(), time.getTimeZone().getDisplayName()));
+              String.format("non-matching timezones: %s %s", date.getTimeZone(), time.getTimeZone()));
     }
     DateTime result = new DateTime(date);
     result.setHours(time.getHours());
