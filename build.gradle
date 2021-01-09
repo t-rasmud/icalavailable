@@ -81,6 +81,7 @@ checkerFramework {
     '-AwarnUnneededSuppressions',
     // ":deterministic" is for the purity checker
     '-AwarnUnneededSuppressionsExceptions=purity|method.guarantee.violated|:deterministic',
+          '-Awarns',
     // '-AusePolyDefault' 
   ]
 }
